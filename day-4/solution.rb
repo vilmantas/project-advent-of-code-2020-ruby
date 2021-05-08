@@ -1,5 +1,5 @@
 def read_data
-  File.open('./input.txt').readlines
+  raw_data = File.open('./input.txt').readlines
 end
 
 def part_1(data)
@@ -8,28 +8,18 @@ def part_1(data)
 
   people = extract_people data
 
+  valid_people = []
+
   people.each do |person|
-    if validate_person_part_1 person
+    if validate_person person
       counter += 1
-      puts person
+      if person['byr'] == '1940'
+        puts person
+      end
     end
   end
 
-  counter
-end
-
-def part_2(data)
-
-  counter = 0
-
-  people = extract_people data
-
-  people.each do |person|
-    if validate_person_part_2 person
-      counter += 1
-      puts person
-    end
-  end
+  valid_people.sort.each { |x| puts x }
 
   counter
 end
@@ -64,16 +54,11 @@ def parse_data_line(line, data)
   data
 end
 
-def validate_person_part_1(person)
+def validate_person(person)
 
   keys = person.keys
 
   return false unless keys.length == 8 || (keys.length == 7 && !keys.include?('cid'))
-end
-
-def validate_person_part_2(person)
-
-  return false if validate_person_part_1(person)
 
   person.all? { |key, value| validate_property(key, value) }
 end
@@ -122,6 +107,9 @@ def validate_property(key, value)
   end
 
   if key == 'pid'
+
+    return false if value.length != 9
+
     if value.match /[0-9]{9}/
       return true
     else
