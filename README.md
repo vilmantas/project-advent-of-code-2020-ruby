@@ -1,3 +1,3 @@
 ## Advent of Code 2020
 
-#### Solutions implemented in Ruby
+#### Solutions implemented in Ruby 
